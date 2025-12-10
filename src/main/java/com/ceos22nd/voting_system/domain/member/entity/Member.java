@@ -1,6 +1,8 @@
 package com.ceos22nd.voting_system.domain.member.entity;
 
 import com.ceos22nd.voting_system.domain.member.enums.PartType;
+import com.ceos22nd.voting_system.global.dto.ErrorCode;
+import com.ceos22nd.voting_system.global.exception.BusinessException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,9 +34,9 @@ public class Member {
     @Column(name = "is_part_lead_candidate", nullable = false)
     private boolean isPartLeadCandidate;
 
-    // TODO: Team Entity 와 Join 하기
-    @Column(name = "team_id")
-    private String teamId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Member(String loginId, String password, String email,
@@ -63,5 +65,17 @@ public class Member {
                 .realName(realName)
                 .isPartLeadCandidate(isPartLeadCandidate)
                 .build();
+    }
+
+    public void validateTeamVote(Long voteTeam) {
+        if (this.team.getId().equals(voteTeam)) {
+            throw new BusinessException(ErrorCode.SELF_VOTING_NOT_ALLOWED);
+        }
+    }
+
+    public void validateCandidate() {
+        if(!this.isPartLeadCandidate) {
+            throw new BusinessException(ErrorCode.CANDIDATE_NOT_FOUND);
+        }
     }
 }
