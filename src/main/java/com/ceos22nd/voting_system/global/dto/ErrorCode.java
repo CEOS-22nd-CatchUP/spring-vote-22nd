@@ -25,7 +25,16 @@ public enum ErrorCode {
      * Common
      */
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생헀습니다."),
-    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "입력값이 올바르지 않습니다.");
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "입력값이 올바르지 않습니다."),
+
+    /**
+     * Vote
+     */
+    ALREADY_VOTED(HttpStatus.BAD_REQUEST, "이미 투표를 완료했습니다."),
+    SELF_VOTING_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "본인 팀에 투표할 수 없습니다."),
+    TEAM_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 팀입니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+    CANDIDATE_NOT_FOUND(HttpStatus.NOT_FOUND, "후보자가 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
