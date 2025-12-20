@@ -35,6 +35,7 @@ public class MemberController {
                         member.getId(),
                         member.getRealName(),
                         member.getTeam().getTeamName(),
+                        member.getPart(),
                         hasVotedForTeam,
                         hasVotedForPart
                 )
