@@ -34,6 +34,7 @@ public class MemberController {
                 MemberStatusResponse.of(
                         member.getId(),
                         member.getRealName(),
+                        member.getTeam().getTeamName(),
                         hasVotedForTeam,
                         hasVotedForPart
                 )
