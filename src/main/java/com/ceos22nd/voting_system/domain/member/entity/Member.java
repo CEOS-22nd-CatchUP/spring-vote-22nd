@@ -39,12 +39,13 @@ public class Member {
     private Team team;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Member(String loginId, String password, String email,
-                   PartType part, String realName, boolean isPartLeadCandidate) {
+    private Member(String loginId, String password, String email, PartType part,
+                   Team team, String realName, boolean isPartLeadCandidate) {
         this.loginId = loginId;
         this.password = password; // DB 컬럼명과 매핑
         this.email = email;
         this.part = part;
+        this.team = team;
         this.realName = realName;
         this.isPartLeadCandidate = isPartLeadCandidate;
     }
@@ -54,6 +55,7 @@ public class Member {
             String encryptedPassword,
             String email,
             PartType part,
+            Team team,
             String realName,
             boolean isPartLeadCandidate
     ){
@@ -62,6 +64,7 @@ public class Member {
                 .password(encryptedPassword)
                 .email(email)
                 .part(part)
+                .team(team)
                 .realName(realName)
                 .isPartLeadCandidate(isPartLeadCandidate)
                 .build();

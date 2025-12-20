@@ -6,7 +6,9 @@ import com.ceos22nd.voting_system.domain.auth.dto.SignUpRequest;
 import com.ceos22nd.voting_system.domain.auth.dto.SignUpResponse;
 import com.ceos22nd.voting_system.domain.auth.jwt.TokenProvider;
 import com.ceos22nd.voting_system.domain.member.entity.Member;
+import com.ceos22nd.voting_system.domain.member.entity.Team;
 import com.ceos22nd.voting_system.domain.member.repository.MemberRepository;
+import com.ceos22nd.voting_system.domain.member.repository.TeamRepository;
 import com.ceos22nd.voting_system.global.dto.ErrorCode;
 import com.ceos22nd.voting_system.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+    private final TeamRepository teamRepository;
 
     @Transactional
     public SignUpResponse signUp(SignUpRequest request){
@@ -38,12 +41,16 @@ public class AuthService {
         // 비밀번호 해싱
         String encryptedPassword = passwordEncoder.encode(request.password());
 
+        Team team = teamRepository.findByTeamName(request.team())
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_NOT_FOUND));
+
         // Member 객체 생성
         Member newMember = Member.create(
                 request.loginId(),
                 encryptedPassword,
                 request.email(),
                 request.part(),
+                team,
                 request.realName(),
                 request.isPartLeadCandidate()
         );

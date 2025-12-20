@@ -21,7 +21,7 @@ public record SignUpRequest(
 
         @NotNull(message = "파트를 입력해주세요.")
         PartType part,
-
+        
         String team,
 
         @NotNull(message = "파트장 후보 여부를 체크해주세요.")
