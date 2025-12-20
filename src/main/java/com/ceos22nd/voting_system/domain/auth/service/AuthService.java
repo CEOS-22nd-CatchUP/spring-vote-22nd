@@ -41,7 +41,7 @@ public class AuthService {
         // 비밀번호 해싱
         String encryptedPassword = passwordEncoder.encode(request.password());
 
-        Team team = teamRepository.findByTeamName(request.team())
+        Team team = teamRepository.findByTeamName(request.team().getInputValue())
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_NOT_FOUND));
 
         // Member 객체 생성

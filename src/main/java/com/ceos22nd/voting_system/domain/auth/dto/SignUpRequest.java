@@ -1,6 +1,7 @@
 package com.ceos22nd.voting_system.domain.auth.dto;
 
 import com.ceos22nd.voting_system.domain.member.enums.PartType;
+import com.ceos22nd.voting_system.domain.member.enums.TeamType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,8 +22,9 @@ public record SignUpRequest(
 
         @NotNull(message = "파트를 입력해주세요.")
         PartType part,
-        
-        String team,
+
+        @NotNull(message = "소속 팀을 선택해주세요.")
+        TeamType team,
 
         @NotNull(message = "파트장 후보 여부를 체크해주세요.")
         Boolean isPartLeadCandidate
