@@ -3,6 +3,7 @@ package com.ceos22nd.voting_system.domain.vote.controller;
 import com.ceos22nd.voting_system.domain.member.entity.Member;
 import com.ceos22nd.voting_system.domain.member.entity.Team;
 import com.ceos22nd.voting_system.domain.vote.dto.PartLeadCandidateResponse;
+import com.ceos22nd.voting_system.domain.vote.dto.TeamCandidateResponse;
 import com.ceos22nd.voting_system.domain.vote.service.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,14 @@ public class CandidateController {
     private final VoteService voteService;
 
     @GetMapping("/teams")
-    public ResponseEntity<List<Team>> getTeamCandidates() {
-        List<Team> teams = voteService.getAllTeams();
-        return ResponseEntity.ok(teams);
+    public ResponseEntity<List<TeamCandidateResponse>> getTeamCandidates() {
+        List<Team> candidates = voteService.getAllTeams();
+
+        List<TeamCandidateResponse> response = candidates.stream()
+                .map(TeamCandidateResponse::from)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/parts")
