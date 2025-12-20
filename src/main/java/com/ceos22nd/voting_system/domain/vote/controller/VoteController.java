@@ -1,13 +1,17 @@
 package com.ceos22nd.voting_system.domain.vote.controller;
 
 import com.ceos22nd.voting_system.domain.auth.security.CustomUserDetails;
+import com.ceos22nd.voting_system.domain.vote.dto.TotalVoteResultResponse;
 import com.ceos22nd.voting_system.domain.vote.dto.VoteRequest;
+import com.ceos22nd.voting_system.domain.vote.dto.VoteResultResponse;
 import com.ceos22nd.voting_system.domain.vote.dto.VoteStatusResponse;
 import com.ceos22nd.voting_system.domain.vote.service.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/votes")
@@ -46,5 +50,18 @@ public class VoteController {
         boolean hasVotedForPartLead = voteService.hasVotedForPartLead(voterId);
 
         return ResponseEntity.ok(VoteStatusResponse.of(hasVotedForTeam, hasVotedForPartLead));
+    }
+
+    @GetMapping("/results")
+    public ResponseEntity<TotalVoteResultResponse> getVoteResult(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        List<VoteResultResponse> teamResults = voteService.getVoteResult("team");
+
+        List<VoteResultResponse> partResults = voteService.getVoteResult("part");
+
+        TotalVoteResultResponse response = TotalVoteResultResponse.of(teamResults, partResults);
+
+        return ResponseEntity.ok(response);
     }
 }

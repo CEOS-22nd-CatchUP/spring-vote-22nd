@@ -4,6 +4,7 @@ import com.ceos22nd.voting_system.domain.member.entity.Member;
 import com.ceos22nd.voting_system.domain.member.entity.Team;
 import com.ceos22nd.voting_system.domain.member.repository.MemberRepository;
 import com.ceos22nd.voting_system.domain.member.repository.TeamRepository;
+import com.ceos22nd.voting_system.domain.vote.dto.VoteResultResponse;
 import com.ceos22nd.voting_system.domain.vote.entity.PartLeadVote;
 import com.ceos22nd.voting_system.domain.vote.entity.TeamVote;
 import com.ceos22nd.voting_system.domain.vote.repository.PartLeadVoteRepository;
@@ -54,6 +55,17 @@ public class VoteService {
 
         PartLeadVote partLeadVote = PartLeadVote.createVote(voter, candidate);
         partLeadRepository.save(partLeadVote);
+    }
+
+    @Transactional (readOnly = true)
+    public List<VoteResultResponse> getVoteResult(String type){
+        if ("team".equalsIgnoreCase(type)){
+            return teamVoteRepository.findAllTeamVoteResults();
+        } else if ("part".equalsIgnoreCase(type)) {
+            return partLeadRepository.findAllPartLeadVoteResults();
+        } else {
+            throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
+        }
     }
 
     /**
