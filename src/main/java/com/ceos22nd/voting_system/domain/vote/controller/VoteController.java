@@ -1,7 +1,7 @@
 package com.ceos22nd.voting_system.domain.vote.controller;
 
 import com.ceos22nd.voting_system.domain.auth.security.CustomUserDetails;
-import com.ceos22nd.voting_system.domain.vote.dto.TotalVoteResultResponse;
+import com.ceos22nd.voting_system.domain.member.enums.PartType;
 import com.ceos22nd.voting_system.domain.vote.dto.VoteRequest;
 import com.ceos22nd.voting_system.domain.vote.dto.VoteResultResponse;
 import com.ceos22nd.voting_system.domain.vote.dto.VoteStatusResponse;
@@ -52,15 +52,22 @@ public class VoteController {
         return ResponseEntity.ok(VoteStatusResponse.of(hasVotedForTeam, hasVotedForPartLead));
     }
 
-    @GetMapping("/results")
-    public ResponseEntity<TotalVoteResultResponse> getVoteResult(
+    @GetMapping("/results/teams")
+    public ResponseEntity<List<VoteResultResponse>> getTeamVoteResult(
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        List<VoteResultResponse> teamResults = voteService.getVoteResult("team");
+        List<VoteResultResponse> response = voteService.getTeamVoteResult();
 
-        List<VoteResultResponse> partResults = voteService.getVoteResult("part");
+        return ResponseEntity.ok(response);
+    }
 
-        TotalVoteResultResponse response = TotalVoteResultResponse.of(teamResults, partResults);
+    @GetMapping("/results/parts/{part}")
+    public ResponseEntity<List<VoteResultResponse>> getPartVoteResult(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable("part") String part
+    ) {
+        PartType partType = PartType.from(part);
+        List<VoteResultResponse> response = voteService.getPartVoteResult(partType);
 
         return ResponseEntity.ok(response);
     }

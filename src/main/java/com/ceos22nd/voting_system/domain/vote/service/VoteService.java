@@ -2,6 +2,7 @@ package com.ceos22nd.voting_system.domain.vote.service;
 
 import com.ceos22nd.voting_system.domain.member.entity.Member;
 import com.ceos22nd.voting_system.domain.member.entity.Team;
+import com.ceos22nd.voting_system.domain.member.enums.PartType;
 import com.ceos22nd.voting_system.domain.member.repository.MemberRepository;
 import com.ceos22nd.voting_system.domain.member.repository.TeamRepository;
 import com.ceos22nd.voting_system.domain.vote.dto.VoteResultResponse;
@@ -12,6 +13,7 @@ import com.ceos22nd.voting_system.domain.vote.repository.TeamVoteRepository;
 import com.ceos22nd.voting_system.global.dto.ErrorCode;
 import com.ceos22nd.voting_system.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class VoteService {
     private final PartLeadVoteRepository partLeadRepository;
     private final MemberRepository memberRepository;
     private final TeamRepository teamRepository;
+    private final PartLeadVoteRepository partLeadVoteRepository;
 
     /**
      * 팀에 투표하기
@@ -57,13 +60,20 @@ public class VoteService {
         partLeadRepository.save(partLeadVote);
     }
 
-    @Transactional (readOnly = true)
-    public List<VoteResultResponse> getVoteResult(String type){
-        if ("team".equalsIgnoreCase(type)){
+    @Transactional(readOnly = true)
+    public List<VoteResultResponse> getTeamVoteResult(){
+        try {
             return teamVoteRepository.findAllTeamVoteResults();
-        } else if ("part".equalsIgnoreCase(type)) {
-            return partLeadRepository.findAllPartLeadVoteResults();
-        } else {
+        } catch (DataAccessException e){
+            throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<VoteResultResponse> getPartVoteResult(PartType partType){
+        try {
+            return partLeadVoteRepository.findAllPartLeadVoteResultsByPart(partType);
+        } catch (DataAccessException e){
             throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
         }
     }

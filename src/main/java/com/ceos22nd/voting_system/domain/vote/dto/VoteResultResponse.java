@@ -11,7 +11,7 @@ public class VoteResultResponse {
     private String targetName; // team name 또는 member name
     private Long voteCount;
 
-    public static VoteResultResponse of(Long tagetId, String targetName, Long voteCount) {
-        return new VoteResultResponse(tagetId, targetName, voteCount);
+    public static VoteResultResponse of(Long targetId, String targetName, Long voteCount) {
+        return new VoteResultResponse(targetId, targetName, voteCount);
     }
 }
