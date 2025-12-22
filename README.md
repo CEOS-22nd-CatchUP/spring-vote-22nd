@@ -1,6 +1,8 @@
 # spring-vote-22nd
 ceos back-end 22nd voting service project
 
+[CEOS 22기 파트장 & 팀 투표 하러가기](https://next-vote-22nd-inky.vercel.app/)
+
 ## Swagger
 https://ceos-22nd-catchup.github.io/swagger-ui/
 
